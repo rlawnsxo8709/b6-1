@@ -1,0 +1,21 @@
+-- Q03 [기본조회] 2026년에 가입한 회원을 가입일 순으로 조회한다
+SELECT id, name, email, joined_at
+FROM member
+WHERE joined_at >= '2026-01-01' AND joined_at < '2027-01-01'
+ORDER BY joined_at;
+
+-- 실행 결과 (sqlite3 CLI, foreign_keys=ON, .headers on, .mode column)
+id  name    email                     joined_at 
+--  ------  ------------------------  ----------
+1   김민준  minjun.kim@example.com    2026-01-12
+2   이서연  seoyeon.lee@example.com   2026-02-03
+4   최유진  yujin.choi@example.com    2026-03-15
+6   강도현  dohyun.kang@example.com   2026-04-02
+7   조수아  sua.jo@example.com        2026-05-18
+8   윤지우  jiwoo.yoon@example.com    2026-06-09
+9   장예은  yeeun.jang@example.com    2026-07-21
+10  임준서  junseo.im@example.com     2026-08-05
+11  한소율  soyul.han@example.com     2026-08-30
+12  오지안  jian.oh@example.com       2026-09-07
+13  서현우  hyunwoo.seo@example.com   2026-09-14
+14  신채원  chaewon.shin@example.com  2026-09-22

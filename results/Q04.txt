@@ -1,0 +1,16 @@
+-- Q04 [기본조회] 정원 15명 이상이면서 수강료 2만 원 이하인 부담 없는 수업을 조회한다
+SELECT id, title, category, capacity, price
+FROM lesson
+WHERE capacity >= 15 AND price <= 20000
+ORDER BY price, capacity DESC;
+
+-- 실행 결과 (sqlite3 CLI, foreign_keys=ON, .headers on, .mode column)
+id  title             category  capacity  price
+--  ----------------  --------  --------  -----
+12  전신 스트레칭     스트레칭  18        10000
+4   줌바 댄스 입문    줌바      25        12000
+13  줌바 피트니스     줌바      25        12000
+1   아침 요가 플로우  요가      15        15000
+10  저녁 요가 릴렉스  요가      15        15000
+3   파워 스피닝 45    스피닝    20        18000
+11  인터벌 스피닝     스피닝    20        18000

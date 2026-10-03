@@ -1,0 +1,16 @@
+-- Q11 [집계] 멤버십 이용 기간별 가입 회원 수와 회원이 내는 평균 월회비를 구한다 (COUNT + AVG)
+SELECT p.months,
+       COUNT(m.id) AS member_count,
+       ROUND(AVG(p.monthly_fee), 0) AS avg_monthly_fee
+FROM membership_plan p
+INNER JOIN member m ON m.plan_id = p.id
+GROUP BY p.months
+ORDER BY p.months;
+
+-- 실행 결과 (sqlite3 CLI, foreign_keys=ON, .headers on, .mode column)
+months  member_count  avg_monthly_fee
+------  ------------  ---------------
+1       5             86000.0        
+3       6             60667.0        
+6       3             66667.0        
+12      1             50000.0        

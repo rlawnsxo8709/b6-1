@@ -1,0 +1,23 @@
+-- Q10 [집계] 트레이너별 매출을 구한다 (출석·예약 상태의 예약만 합산, SUM(price))
+SELECT t.id AS trainer_id, t.name AS trainer_name, t.specialty,
+       COUNT(b.id) AS paid_bookings,
+       SUM(l.price) AS revenue
+FROM trainer t
+INNER JOIN lesson l ON l.trainer_id = t.id
+INNER JOIN booking b ON b.lesson_id = l.id
+WHERE b.status IN ('attended', 'booked')
+GROUP BY t.id, t.name, t.specialty
+ORDER BY revenue DESC, t.id;
+
+-- 실행 결과 (sqlite3 CLI, foreign_keys=ON, .headers on, .mode column)
+trainer_id  trainer_name  specialty  paid_bookings  revenue
+----------  ------------  ---------  -------------  -------
+8           윤서영        필라테스   3              135000 
+3           박세진        스피닝     5              90000  
+1           김태우        요가       4              60000  
+2           이하늘        필라테스   2              56000  
+9           장민혁        복싱       2              50000  
+6           강나연        요가       2              40000  
+4           최민아        줌바       3              36000  
+5           정도윤        웨이트     1              35000  
+10          한다은        스트레칭   1              10000  

@@ -1,0 +1,12 @@
+-- Q13 [서브쿼리] 예약 기록이 한 건도 없는 회원을 찾는다 (NOT EXISTS)
+SELECT m.id, m.name, m.email, m.joined_at
+FROM member m
+WHERE NOT EXISTS (SELECT 1 FROM booking b WHERE b.member_id = m.id)
+ORDER BY m.id;
+
+-- 실행 결과 (sqlite3 CLI, foreign_keys=ON, .headers on, .mode column)
+id  name    email                     joined_at 
+--  ------  ------------------------  ----------
+9   장예은  yeeun.jang@example.com    2026-07-21
+14  신채원  chaewon.shin@example.com  2026-09-22
+15  권태양  taeyang.kwon@example.com  2025-10-27

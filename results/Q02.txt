@@ -1,0 +1,15 @@
+-- Q02 [기본조회] 수강료가 높은 상위 5개 수업을 조회한다 (같은 가격이면 빠른 수업 먼저)
+-- LIMIT 은 SQLite·MySQL·PostgreSQL 이 공통으로 지원하는 문법이다.
+SELECT id, title, category, price
+FROM lesson
+ORDER BY price DESC, starts_at
+LIMIT 5;
+
+-- 실행 결과 (sqlite3 CLI, foreign_keys=ON, .headers on, .mode column)
+id  title                category  price
+--  -------------------  --------  -----
+9   리포머 필라테스      필라테스  45000
+5   스트렝스 웨이트 101  웨이트    35000
+14  하체 집중 웨이트     웨이트    35000
+7   크로스핏 WOD         크로스핏  30000
+2   코어 필라테스 기초   필라테스  28000

@@ -1,0 +1,44 @@
+-- Q14 [수정] 기준일(2026-10-01) 이전 수업에 booked 로 남은 예약을 no_show 로 바꾼다 (전후 SELECT 포함)
+-- 변경 전: 이미 지난 수업인데 booked 상태인 예약
+SELECT '변경 전' AS stage, b.id AS booking_id, m.name AS member_name, l.title AS lesson_title, l.starts_at, b.status
+FROM booking b
+INNER JOIN member m ON m.id = b.member_id
+INNER JOIN lesson l ON l.id = b.lesson_id
+WHERE b.status = 'booked' AND l.starts_at < '2026-10-01'
+ORDER BY b.id;
+
+UPDATE booking
+SET status = 'no_show'
+WHERE status = 'booked'
+  AND lesson_id IN (SELECT id FROM lesson WHERE starts_at < '2026-10-01');
+
+-- 변경 후: no_show 예약 전체 (원래 2건 + 방금 바꾼 3건)
+SELECT '변경 후' AS stage, b.id AS booking_id, m.name AS member_name, l.title AS lesson_title, l.starts_at, b.status
+FROM booking b
+INNER JOIN member m ON m.id = b.member_id
+INNER JOIN lesson l ON l.id = b.lesson_id
+WHERE b.status = 'no_show'
+ORDER BY b.id;
+
+-- 변경 후 확인: 지난 수업에 booked 로 남은 예약은 0건이어야 한다
+SELECT '변경 후 확인' AS stage, COUNT(*) AS stale_booked
+FROM booking b
+INNER JOIN lesson l ON l.id = b.lesson_id
+WHERE b.status = 'booked' AND l.starts_at < '2026-10-01';
+
+-- 실행 결과 (sqlite3 CLI, foreign_keys=ON, .headers on, .mode column)
+stage    booking_id  member_name  lesson_title          starts_at         status
+-------  ----------  -----------  --------------------  ----------------  ------
+변경 전  18          조수아       힐링 요가             2026-09-18 10:00  booked
+변경 전  20          오지안       복싱 기초 콤비네이션  2026-09-25 20:00  booked
+변경 전  24          이서연       리포머 필라테스       2026-09-29 11:00  booked
+stage    booking_id  member_name  lesson_title          starts_at         status 
+-------  ----------  -----------  --------------------  ----------------  -------
+변경 후  6           정하윤       코어 필라테스 기초    2026-09-04 19:00  no_show
+변경 후  13          한소율       줌바 댄스 입문        2026-09-10 19:30  no_show
+변경 후  18          조수아       힐링 요가             2026-09-18 10:00  no_show
+변경 후  20          오지안       복싱 기초 콤비네이션  2026-09-25 20:00  no_show
+변경 후  24          이서연       리포머 필라테스       2026-09-29 11:00  no_show
+stage         stale_booked
+------------  ------------
+변경 후 확인  0           

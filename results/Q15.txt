@@ -1,0 +1,20 @@
+-- Q15 [삭제] cancelled 상태의 예약을 삭제한다 (전후 COUNT 포함)
+-- 삭제 전
+SELECT '삭제 전' AS stage, COUNT(*) AS total_bookings,
+       SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) AS cancelled_bookings
+FROM booking;
+
+DELETE FROM booking WHERE status = 'cancelled';
+
+-- 삭제 후
+SELECT '삭제 후' AS stage, COUNT(*) AS total_bookings,
+       SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) AS cancelled_bookings
+FROM booking;
+
+-- 실행 결과 (sqlite3 CLI, foreign_keys=ON, .headers on, .mode column)
+stage    total_bookings  cancelled_bookings
+-------  --------------  ------------------
+삭제 전  30              5                 
+stage    total_bookings  cancelled_bookings
+-------  --------------  ------------------
+삭제 후  25              0                 
