@@ -1,0 +1,12 @@
+-- Q01 [기본조회] 요가 카테고리 수업을 시작 시각 순으로 조회한다
+SELECT id, title, category, starts_at, capacity, price
+FROM lesson
+WHERE category = '요가'
+ORDER BY starts_at;
+
+-- 실행 결과 (sqlite3 CLI, foreign_keys=ON, .headers on, .mode column)
+id  title             category  starts_at         capacity  price
+--  ----------------  --------  ----------------  --------  -----
+1   아침 요가 플로우  요가      2026-09-02 07:00  15        15000
+6   힐링 요가         요가      2026-09-18 10:00  12        20000
+10  저녁 요가 릴렉스  요가      2026-10-02 19:00  15        15000

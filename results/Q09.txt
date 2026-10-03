@@ -1,0 +1,18 @@
+-- Q09 [집계] 취소를 제외한 예약 인원이 3명 이상인 수업을 인원 순으로 조회한다 (COUNT + GROUP BY + HAVING)
+SELECT l.id AS lesson_id, l.title, l.capacity,
+       COUNT(b.id) AS booked_count,
+       ROUND(COUNT(b.id) * 100.0 / l.capacity, 1) AS fill_rate_pct
+FROM lesson l
+INNER JOIN booking b ON b.lesson_id = l.id
+WHERE b.status <> 'cancelled'
+GROUP BY l.id, l.title, l.capacity
+HAVING COUNT(b.id) >= 3
+ORDER BY booked_count DESC, l.id;
+
+-- 실행 결과 (sqlite3 CLI, foreign_keys=ON, .headers on, .mode column)
+lesson_id  title               capacity  booked_count  fill_rate_pct
+---------  ------------------  --------  ------------  -------------
+3          파워 스피닝 45      20        4             20.0         
+2          코어 필라테스 기초  8         3             37.5         
+4          줌바 댄스 입문      25        3             12.0         
+9          리포머 필라테스     6         3             50.0         

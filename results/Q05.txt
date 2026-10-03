@@ -1,0 +1,40 @@
+-- Q05 [INNER JOIN] 예약 목록을 회원명·수업명·시작 시각·상태와 함께 조회한다 (booking, member, lesson 3테이블)
+SELECT b.id AS booking_id, m.name AS member_name, l.title AS lesson_title, l.starts_at, b.status
+FROM booking b
+INNER JOIN member m ON m.id = b.member_id
+INNER JOIN lesson l ON l.id = b.lesson_id
+ORDER BY l.starts_at, b.id;
+
+-- 실행 결과 (sqlite3 CLI, foreign_keys=ON, .headers on, .mode column)
+booking_id  member_name  lesson_title          starts_at         status   
+----------  -----------  --------------------  ----------------  ---------
+1           김민준       아침 요가 플로우      2026-09-02 07:00  attended 
+2           박지호       아침 요가 플로우      2026-09-02 07:00  attended 
+4           윤지우       아침 요가 플로우      2026-09-02 07:00  cancelled
+3           이서연       코어 필라테스 기초    2026-09-04 19:00  attended 
+5           최유진       코어 필라테스 기초    2026-09-04 19:00  attended 
+6           정하윤       코어 필라테스 기초    2026-09-04 19:00  no_show  
+7           김민준       파워 스피닝 45        2026-09-08 20:00  attended 
+8           강도현       파워 스피닝 45        2026-09-08 20:00  attended 
+9           조수아       파워 스피닝 45        2026-09-08 20:00  cancelled
+10          임준서       파워 스피닝 45        2026-09-08 20:00  attended 
+11          한소율       파워 스피닝 45        2026-09-08 20:00  attended 
+12          박지호       줌바 댄스 입문        2026-09-10 19:30  attended 
+13          한소율       줌바 댄스 입문        2026-09-10 19:30  no_show  
+14          윤지우       줌바 댄스 입문        2026-09-10 19:30  attended 
+15          이서연       스트렝스 웨이트 101   2026-09-15 18:30  attended 
+16          강도현       스트렝스 웨이트 101   2026-09-15 18:30  cancelled
+17          최유진       힐링 요가             2026-09-18 10:00  attended 
+18          조수아       힐링 요가             2026-09-18 10:00  booked   
+19          임준서       복싱 기초 콤비네이션  2026-09-25 20:00  attended 
+20          오지안       복싱 기초 콤비네이션  2026-09-25 20:00  booked   
+21          서현우       복싱 기초 콤비네이션  2026-09-25 20:00  cancelled
+22          한소율       리포머 필라테스       2026-09-29 11:00  attended 
+23          최유진       리포머 필라테스       2026-09-29 11:00  attended 
+24          이서연       리포머 필라테스       2026-09-29 11:00  booked   
+25          김민준       저녁 요가 릴렉스      2026-10-02 19:00  booked   
+26          강도현       저녁 요가 릴렉스      2026-10-02 19:00  booked   
+27          박지호       인터벌 스피닝         2026-10-05 07:00  cancelled
+28          서현우       인터벌 스피닝         2026-10-05 07:00  booked   
+29          윤지우       전신 스트레칭         2026-10-07 21:00  booked   
+30          임준서       줌바 피트니스         2026-10-09 19:30  booked   

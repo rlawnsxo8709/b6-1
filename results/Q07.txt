@@ -1,0 +1,25 @@
+-- Q07 [LEFT JOIN] 회원별 예약 수를 조회한다 (예약이 없는 회원도 0건으로 포함)
+SELECT m.id AS member_id, m.name, COUNT(b.id) AS booking_count
+FROM member m
+LEFT JOIN booking b ON b.member_id = m.id
+GROUP BY m.id, m.name
+ORDER BY booking_count DESC, m.id;
+
+-- 실행 결과 (sqlite3 CLI, foreign_keys=ON, .headers on, .mode column)
+member_id  name    booking_count
+---------  ------  -------------
+1          김민준  3            
+2          이서연  3            
+3          박지호  3            
+4          최유진  3            
+6          강도현  3            
+8          윤지우  3            
+10         임준서  3            
+11         한소율  3            
+7          조수아  2            
+13         서현우  2            
+5          정하윤  1            
+12         오지안  1            
+9          장예은  0            
+14         신채원  0            
+15         권태양  0            

@@ -1,0 +1,13 @@
+-- Q08 [LEFT JOIN] 예약이 한 건도 없는 수업을 찾는다 (IS NULL 로 짝이 없는 행만 남김)
+SELECT l.id AS lesson_id, l.title, l.starts_at
+FROM lesson l
+LEFT JOIN booking b ON b.lesson_id = l.id
+WHERE b.id IS NULL
+ORDER BY l.starts_at;
+
+-- 실행 결과 (sqlite3 CLI, foreign_keys=ON, .headers on, .mode column)
+lesson_id  title               starts_at       
+---------  ------------------  ----------------
+7          크로스핏 WOD        2026-09-22 06:30
+14         하체 집중 웨이트    2026-10-13 19:00
+15         매트 필라테스 중급  2026-10-16 18:00

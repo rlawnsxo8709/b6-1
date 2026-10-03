@@ -96,10 +96,45 @@ SQLite는 컬럼 선언 타입을 **친화성(type affinity)** 으로만 해석�
 ## 8. 실행·검증 방식
 
 1. `bash scripts/run_all.sh` — `fitness.db`를 지우고 새로 만든 뒤 스키마 → 시드 → 쿼리 순으로 실행한다. 쿼리마다 `PRAGMA foreign_keys = ON;`을 먼저 실행한다. `sqlite3` 기본값은 FK가 꺼져 있다.
-2. `python3 -m unittest discover -s tests -t . -v` — Python 표준 `sqlite3`로 메모리 DB를 만들어 요구사항을 자동 검증한다. 테스트를 먼저 작성하고 실패를 확인한 뒤 SQL을 쓴다.
+2. `python3 -m unittest discover -s tests -t . -v` — Python 표준 `sqlite3`로 메모리 DB를 만들어 요구사항을 자동 검증한다(26개). 테스트를 먼저 작성하고 실패(RED)를 확인한 뒤 SQL을 쓴다.
 3. 결과 텍스트는 실제 실행 출력만 담는다. 생성된 `.db` 파일은 커밋하지 않는다.
 
-## 9. 범위 밖
+| 테스트 파일 | 확인하는 것 |
+|---|---|
+| `test_schema.py` | PK, FK 4개, 없는 부모 참조 차단, UNIQUE·NOT NULL·CHECK, `ON DELETE RESTRICT`, 자식 있는 부모 삭제 차단 |
+| `test_seed.py` | 테이블별 10행 이상, FK 무결성, 예약 없는 회원·수업, 4가지 status, 기준일 이전 `booked` |
+| `test_queries.py` | 머리 주석 형식과 범주별 개수, 번호 순서 실행, 수정·삭제 쿼리의 위치와 전후 변화, 인덱스 사용, `[SQLite 전용]` 표시 |
+| `test_run_all.py` | `run_all.sh` 재실행, 결과 파일 원문·출력, 재현성, FK 차단 기록 |
+
+## 9. 샘플 데이터 설계
+
+각 테이블 행 수는 상품 10 · 회원 15 · 트레이너 10 · 수업 15 · 예약 30이다. 쿼리가 의미 있는 결과를 내도록 다음을 일부러 넣었다.
+
+| 조건 | 데이터 | 쓰이는 쿼리 |
+|---|---|---|
+| 예약이 없는 회원 3명 (id 9, 14, 15) | `member` | Q07 (0건 포함), Q13 (`NOT EXISTS`) |
+| 예약이 없는 수업 3개 (id 7, 14, 15) | `lesson` | Q08 (`IS NULL`) |
+| 가입 회원이 없는 상품 1개 (시니어 6개월) | `membership_plan` | INNER JOIN 집계(Q11)에서 빠지는 쪽 |
+| 4가지 status 전부 | `booking` | Q09, Q10, Q14, Q15 |
+| 기준일 이전 수업인데 `booked`로 남은 예약 3건 (id 18, 20, 24) | `booking` | Q14 (UPDATE 대상) |
+| 취소 예약 5건 | `booking` | Q09 (제외), Q15 (DELETE 대상) |
+| 한 수업에 취소 제외 4명 (파워 스피닝 45) | `booking` | Q09 (`HAVING`) 결과에 차이가 보이도록 |
+
+예약 id는 예약 시각 순이고, 예약 시각은 모두 수업 시작 이전, 회원 가입일 이후다. 이름·이메일·전화번호는 모두 가상의 값이며 이메일은 `example.com`을 쓴다.
+
+## 10. 쿼리 구성과 설계 결정
+
+| 범주 | 쿼리 | 결정 |
+|---|---|---|
+| 기본 조회 4 | Q01~Q04 | 날짜 범위는 `strftime` 대신 반열린 구간(`>= '2026-01-01' AND < '2027-01-01'`)으로 써서 SQLite 전용 문법을 피한다 |
+| INNER JOIN 2 | Q05, Q06 | Q05는 booking·member·lesson 3테이블 조인 |
+| LEFT JOIN 2 | Q07, Q08 | Q07은 0건 포함 집계, Q08은 `IS NULL`로 짝 없는 행 찾기 |
+| 집계 3 | Q09~Q11 | COUNT·SUM·AVG를 모두 사용. Q11은 상품 하나에 월회비가 하나뿐이라 상품별 AVG가 의미 없어서 **이용 기간(months)별**로 묶었다 |
+| 서브쿼리 2 | Q12, Q13 | 스칼라 서브쿼리와 `NOT EXISTS` |
+| 수정·삭제 2 | Q14, Q15 | 앞 쿼리 결과를 바꾸지 않도록 파일 끝에 둔다. 전후 결과를 구분하려고 각 SELECT 앞에 `stage` 컬럼을 붙인다 |
+| 인덱스 1 | Q16 | `booking.lesson_id`. 생성 전후 `EXPLAIN QUERY PLAN`을 둘 다 남겨 `SCAN` → `SEARCH`로 바뀌는 것을 보인다 |
+
+## 11. 범위 밖
 
 - 뷰·프로시저·트리거: 미션 제약 사항에 따라 쓰지 않는다.
 - 보너스 과제(JOIN과 서브쿼리 비교, 정합성 깨뜨리기 기록, 미니 리포트): 하지 않는다.

@@ -1,0 +1,16 @@
+-- Q12 [서브쿼리] 전체 수업 평균 수강료보다 비싼 수업을 조회한다 (스칼라 서브쿼리)
+SELECT id, title, category, price
+FROM lesson
+WHERE price > (SELECT AVG(price) FROM lesson)
+ORDER BY price DESC, id;
+
+-- 실행 결과 (sqlite3 CLI, foreign_keys=ON, .headers on, .mode column)
+id  title                 category  price
+--  --------------------  --------  -----
+9   리포머 필라테스       필라테스  45000
+5   스트렝스 웨이트 101   웨이트    35000
+14  하체 집중 웨이트      웨이트    35000
+7   크로스핏 WOD          크로스핏  30000
+2   코어 필라테스 기초    필라테스  28000
+15  매트 필라테스 중급    필라테스  28000
+8   복싱 기초 콤비네이션  복싱      25000

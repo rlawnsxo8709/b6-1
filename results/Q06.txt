@@ -1,0 +1,24 @@
+-- Q06 [INNER JOIN] 수업별 담당 트레이너와 그 전문 분야를 조회한다
+SELECT l.id AS lesson_id, l.title, l.category, t.name AS trainer_name, t.specialty
+FROM lesson l
+INNER JOIN trainer t ON t.id = l.trainer_id
+ORDER BY l.id;
+
+-- 실행 결과 (sqlite3 CLI, foreign_keys=ON, .headers on, .mode column)
+lesson_id  title                 category  trainer_name  specialty
+---------  --------------------  --------  ------------  ---------
+1          아침 요가 플로우      요가      김태우        요가     
+2          코어 필라테스 기초    필라테스  이하늘        필라테스 
+3          파워 스피닝 45        스피닝    박세진        스피닝   
+4          줌바 댄스 입문        줌바      최민아        줌바     
+5          스트렝스 웨이트 101   웨이트    정도윤        웨이트   
+6          힐링 요가             요가      강나연        요가     
+7          크로스핏 WOD          크로스핏  조현석        크로스핏 
+8          복싱 기초 콤비네이션  복싱      장민혁        복싱     
+9          리포머 필라테스       필라테스  윤서영        필라테스 
+10         저녁 요가 릴렉스      요가      김태우        요가     
+11         인터벌 스피닝         스피닝    박세진        스피닝   
+12         전신 스트레칭         스트레칭  한다은        스트레칭 
+13         줌바 피트니스         줌바      최민아        줌바     
+14         하체 집중 웨이트      웨이트    정도윤        웨이트   
+15         매트 필라테스 중급    필라테스  이하늘        필라테스 

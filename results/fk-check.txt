@@ -1,0 +1,18 @@
+-- FK 차단 확인 (PRAGMA foreign_keys = ON 상태) -- [SQLite 전용]
+-- 아래 입력은 모두 실패해야 정상이다. 실패 메시지는 sqlite3 가 출력한 그대로다.
+
+-- [1] 존재하지 않는 member_id(999)로 예약 INSERT
+INSERT INTO booking (member_id, lesson_id, booked_at, status) VALUES (999, 1, '2026-10-01 10:00', 'booked');
+Runtime error near line 2: FOREIGN KEY constraint failed (19)
+
+-- [2] 존재하지 않는 lesson_id(999)로 예약 INSERT
+INSERT INTO booking (member_id, lesson_id, booked_at, status) VALUES (1, 999, '2026-10-01 10:00', 'booked');
+Runtime error near line 2: FOREIGN KEY constraint failed (19)
+
+-- [3] 예약이 있는 회원(id=1) 삭제 시도 (ON DELETE RESTRICT)
+DELETE FROM member WHERE id = 1;
+Runtime error near line 2: FOREIGN KEY constraint failed (19)
+
+-- [4] 실패한 입력이 아무 흔적도 남기지 않았는지 확인 -- [SQLite 전용] 출력이 없으면 FK 위반 행이 0건이다
+PRAGMA foreign_key_check;
+-- (끝)
