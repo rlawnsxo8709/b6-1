@@ -32,7 +32,6 @@ answers/                     ← 이 폴더가 곧 b6-1 저장소의 루트
 ├── results/                 Q01.txt ~ Q16.txt, fk-check.txt (실제 실행 출력)
 ├── tests/                   표준 unittest (스키마·시드·쿼리·실행 스크립트 검증)
 ├── README.md                사용 가이드 + ERD + 쿼리 표 + 체크리스트 + 검증 결과
-├── EXPLAIN.md               과제 목표 6문항 + 평가 문항 답변
 └── PLAN.md                  이 문서
 ```
 
