@@ -14,7 +14,7 @@
 | 테스트 | Python `unittest` 26개 (`python3 -m unittest discover -s tests -t . -v`) |
 | 기준일 | 2026-10-01 고정 (`date('now')`를 쓰지 않아 결과가 언제나 같다) |
 
-설계 결정은 [PLAN.md](PLAN.md), 과제 목표와 평가 문항 답변은 [EXPLAIN.md](EXPLAIN.md)에 있다.
+설계 결정은 [PLAN.md](PLAN.md)에 있다.
 
 ---
 
@@ -326,7 +326,7 @@ PRAGMA foreign_key_check;
 -- (끝)
 ```
 
-> **주의**: `sqlite3`는 연결마다 FK 강제가 **꺼진 채** 시작한다. 이 프로젝트는 `run_all.sh`의 모든 쿼리 실행, 테스트의 모든 연결에서 `PRAGMA foreign_keys = ON`을 먼저 실행한다. FK를 켜지 않으면 같은 INSERT가 그대로 성공해서 고아 행이 생긴다. 실제로 켜지 않고 시도한 결과는 [EXPLAIN.md](EXPLAIN.md)의 "어려웠던 점"에 있다.
+> **주의**: `sqlite3`는 연결마다 FK 강제가 **꺼진 채** 시작한다. 이 프로젝트는 `run_all.sh`의 모든 쿼리 실행, 테스트의 모든 연결에서 `PRAGMA foreign_keys = ON`을 먼저 실행한다. FK를 켜지 않으면 같은 INSERT가 그대로 성공해서 고아 행이 생긴다.
 
 ---
 
@@ -341,7 +341,7 @@ PRAGMA foreign_key_check;
 ├── scripts/run_all.sh     새 DB 생성 → 쿼리별 실행 → results/ 저장
 ├── results/               Q01.txt ~ Q16.txt, fk-check.txt (실제 실행 출력)
 ├── tests/                 표준 unittest 26개
-├── README.md  PLAN.md  EXPLAIN.md
+├── README.md  PLAN.md
 └── .gitignore             *.db, __pycache__/
 ```
 
