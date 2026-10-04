@@ -96,7 +96,7 @@ SQLite는 컬럼 선언 타입을 **친화성(type affinity)** 으로만 해석�
 ## 8. 실행·검증 방식
 
 1. `bash scripts/run_all.sh` — `fitness.db`를 지우고 새로 만든 뒤 스키마 → 시드 → 쿼리 순으로 실행한다. 쿼리마다 `PRAGMA foreign_keys = ON;`을 먼저 실행한다. `sqlite3` 기본값은 FK가 꺼져 있다.
-2. `python3 -m unittest discover -s tests -t . -v` — Python 표준 `sqlite3`로 메모리 DB를 만들어 요구사항을 자동 검증한다(26개). 처음 작성한 15개는 SQL·스크립트 없이 먼저 실패(RED)를 확인한 뒤 구현했고, 나머지 11개(스키마 4·쿼리 7)는 구현 후 보강으로 추가해 일부러 SQL을 망가뜨려 실패하는지 확인했다.
+2. `python3 -m unittest discover -s tests -t . -v` — Python 표준 `sqlite3`로 메모리 DB를 만들어 요구사항을 자동 검증한다(26개). 처음 작성한 15개는 SQL·스크립트 없이 먼저 실패(RED)를 확인한 뒤 구현했고, 나머지 11개(스키마 4·쿼리 7)는 구현 후 보강으로 추가했다. 그중 2개(`test_mutating_queries_come_last`, `test_query_ids_are_sequential`)만 Q15를 Q05 앞으로 옮긴 복사본에서 실패하는 것을 확인했고, 나머지 9개는 실패를 확인하지 않았다.
 3. 결과 텍스트는 실제 실행 출력만 담는다. 생성된 `.db` 파일은 커밋하지 않는다.
 
 | 테스트 파일 | 확인하는 것 |
