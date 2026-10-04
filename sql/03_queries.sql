@@ -169,7 +169,7 @@ FROM booking;
 -- ------------------------------------------------------------
 
 -- Q16 [인덱스] booking.lesson_id 에 인덱스를 만들고 실행 계획으로 사용 여부를 확인한다
--- 적용 이유: 수업별 예약 조회·JOIN(Q05, Q08, Q09, Q10)이 lesson_id 로 booking 을 찾는데, UNIQUE(member_id, lesson_id) 의 자동 인덱스는 member_id 가 앞이라 lesson_id 단독 검색에는 쓰이지 않는다.
+-- 적용 이유: 수업별 예약을 lesson_id 로 찾는 조회(Q09 집계, Q08 JOIN)가 있는데, UNIQUE(member_id, lesson_id) 의 자동 인덱스는 member_id 가 앞이라 lesson_id 단독 검색에는 쓰이지 않는다.
 -- 인덱스 생성 전 실행 계획
 SELECT '인덱스 생성 전' AS stage;
 EXPLAIN QUERY PLAN  -- [SQLite 전용] 실행 계획을 보여 주는 명령
